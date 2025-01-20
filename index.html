@@ -1,1 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" href="notes1.png">
+    <title>Notes App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg: linear-gradient(to top right, #363690 41%, #3ec7f5 100%);
+            --bg-input: #e1e1ed;
+        }
+
+        .light-mode {
+            --bg: linear-gradient(to left, #2a2d30, #080a0c);
+            --bg-input: #fcf9f9;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--color-text);
+        }
+
+        .switch {
+            position: absolute;
+            margin-left: -9999px;
+            visibility: hidden;
+        }
+
+        .switch+label {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+        }
+
+        .switch+label {
+            padding: 2px;
+            width: 52px;
+            height: 27px;
+            background-color: rgba(23, 21, 21, 0.3);
+            border-radius: 100px;
+        }
+
+        .switch+label:before,
+        .switch+label:after {
+            display: block;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            bottom: 1px;
+            content: "";
+        }
+
+        .switch+label:before {
+            right: 1px;
+            background-color: var(--bg-input);
+            border-radius: 60px;
+            transition: all 0.4s;
+        }
+
+        .switch+label:after {
+            width: 30px;
+            background-color: #fff;
+            border-radius: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s;
+        }
+
+        .switch:checked+label:before {
+            background-color: #f3eff5;
+        }
+
+        .switch:checked+label:after {
+            transform: translateX(30px);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: black;
+        }
+
+        #header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .card {
+            width: 100%;
+            border: none;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin: 10px;
+        }
+
+        #Image1 {
+            border-radius: 50%;
+            height: 6rem;
+            width: 6rem;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .card-body {
+            background-color: rgb(193, 175, 175);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #addBtn {
+            background: #166aaa;
+            color: #ffffff;
+        }
+
+        .delBtn {
+            background-color: #c21e1e;
+            columns: #ffffff;
+        }
+
+        .note-title {
+            width: 100%;
+            outline: none;
+            border: none;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #323232;
+        }
+
+        .note-textarea {
+            width: 100%;
+            outline: none;
+            border: none;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #323232;
+        }
+
+        label {
+            font-size: large;
+            color: black;
+        }
+
+        #addBtn:hover {
+            background-color: #eceff4;
+            color: blue;
+            font-weight: 500;
+            border: 2px solid black;
+            transform: scale(0.9);
+            outline: none;
+        }
+
+        .delBtn:hover {
+            background-color: #eceff4;
+            color: red;
+            font-weight: 500;
+            border: 2px solid black;
+            transform: scale(0.9);
+            outline: none;
+        }
+
+        #emptyFormToast {
+            display: none;
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #ffdddd;
+            border: 1px solid #f00;
+            border-radius: 5px;
+        }
+
+        .filter-div {
+            display: flex;
+            width: 100%;
+            text-align: center;
+            gap: 18px;
+            margin-bottom: 3rem;
+        }
+
+        .unchecked {
+            cursor: pointer;
+        }
+
+        .checked {
+            color: yellow;
+        }
+
+        .noteHead {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .fa-star {
+            cursor: pointer;
+        }
+
+        .star-important {
+            color: gold;
+        }
+
+        .search-bar {
+            gap: 0.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #sortNotesDropdown {
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+
+        #sortNotesDropdown option {
+            background-color: #333;
+            color: white;
+        }
+
+        input {
+            outline: none;
+            max-width: 300px;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .notes {
+            justify-content: center;
+        }
+
+        #sortNotes {
+            margin-left: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="header">
+        <img src="notes.png" alt="My Notes" id="Image1">
+        <h1 style="color: rgb(162, 240, 255); margin: 10px; margin-left: 10rem;">Welcome To Magic Notes</h1>
+    </div>
+
+    <div class="container my-3">
+        <label for="switch">
+            <input type="checkbox" id="switch" class="switch">
+            <label for="switch"></label>
+        </label>
+        <h2 style="color: whitesmoke;">Enable Dark Mode</h2>
+        <script>
+            const $html = document.querySelector("html");
+            const $checkbox = document.querySelector("#switch");
+
+            $checkbox.addEventListener("change", function () {
+                $html.classList.toggle("light-mode");
+            });
+        </script>
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="addTitle">Please add your note title</label>
+                        <input type="text" class="form-control note-title" id="addTitle" placeholder="Enter note title">
+                    </div>
+                    <div class="form-group">
+                        <label for="addTxt">Please add your notes</label>
+                        <textarea class="form-control note-textarea" id="addTxt" rows="3"
+                            placeholder="Enter your notes here"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="addBtn">Add Note</button>
+                </form>
+            </div>
+        </div>
+
+        <h2 style="color: rgb(162, 240, 255);">Your Notes</h2>
+
+        <div class="filter-div">
+            <label for="sortNotesDropdown" style="color: white;">Sort notes by:</label>
+            <select id="sortNotesDropdown" onchange="sortNotes(this.value)">
+                <option value="dateAsc">Date Ascending</option>
+                <option value="dateDesc">Date Descending</option>
+                <option value="importance">Importance</option>
+                <option value="wordCount">Word Count</option>
+            </select>
+            <div class="search-bar">
+                <label for="search" style="color: white;">Search</label>
+                <input type="search" id="search" class="form-control note-search">
+            </div>
+        </div>
+
+        <div id="notes" class="notes row container-fluid"></div>
+        <div id="emptyFormToast">Note is empty!</div>
+
+        <script>
+            console.log("Welcome to notes app. This is app.js");
+            showNotes();
+            let notes = [];
+
+            let addBtn = document.getElementById("addBtn");
+            addBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                let addTxt = document.getElementById("addTxt");
+                let addTitle = document.getElementById("addTitle");
+
+                if (!addTxt.value.trim() && !addTitle.value.trim()) {
+                    const toast = document.getElementById("emptyFormToast");
+                    toast.style.display = "block";
+                    setTimeout(() => {
+                        toast.style.display = "none";
+                    }, 3000);
+                    return;
+                }
+
+                let notes = localStorage.getItem("notes");
+
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+
+                let note = {
+                    title: addTitle.value,
+                    text: addTxt.value,
+                    timestamp: new Date().toJSON(),
+                    important: false,
+                };
+
+                notesObj.push(note);
+
+                localStorage.setItem("notes", JSON.stringify(notesObj));
+                addTxt.value = "";
+                addTitle.value = "";
+                showNotes();
+            });
+
+            function displayNotes() {
+                let html = "";
+
+                notesObj.forEach(function (element, index) {
+                    let className = element.fav
+                        ? `fa-solid fa-star checked`
+                        : `fa-regular fa-star-o unchecked`;
+                    let date = new Date(element.timestamp);
+                    let dateLocale = date.toLocaleDateString();
+                    let timeLocale = date.toLocaleTimeString();
+                    let starClass = element.important
+                        ? "fa-solid fa-star star-important"
+                        : "fa-regular fa-star";
+                    html += `
+                        <div class="noteCard my-2 mx-2 card" style="width: 18rem;">
+                            <div class="card-body">
+                                <div class="noteHead">
+                                    <h5 class="card-title">${element.title}</h5>
+                                    <div><i id="favFlag" class="${starClass} ${className}" onClick=saveFavorite(${index})></i></div>
+                                </div>
+                                <h6 style="font-size: small;">Posted: ${dateLocale} - ${timeLocale}</h6>
+                                <hr color="#fff"/>
+                                <p class="card-text"> ${element.text}</p>
+
+                                <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-danger delBtn">Delete Note</button>
+                            </div>
+                        </div>`;
+                });
+                let notesElm = document.getElementById("notes");
+                if (notesObj.length != 0) {
+                    notesElm.innerHTML = html;
+                    notesElm.style.color = "black";
+                } else {
+                    notesElm.innerHTML = `Nothing to show! Use "Add a Note" section above to add notes.`;
+                    notesElm.style.color = "white";
+                }
+            }
+
+            function showNotes() {
+                let notes = localStorage.getItem("notes");
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+
+                displayNotes(notesObj);
+            }
+
+            function toggleStar(index) {
+                let notes = localStorage.getItem("notes");
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+
+                notesObj[index].important = !notesObj[index].important;
+
+                localStorage.setItem("notes", JSON.stringify(notesObj));
+
+                showNotes();
+            }
+
+            function sortNotes(criteria) {
+                let notes = localStorage.getItem("notes");
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+
+                switch (criteria) {
+                    case "dateAsc":
+                        notesObj.sort(sortByDateAscending);
+                        break;
+                    case "dateDesc":
+                        notesObj.sort(sortByDateDescending);
+                        break;
+                    case "importance":
+                        notesObj.sort(sortByImportance);
+                        break;
+                    case "wordCount":
+                        notesObj.sort(sortByWordCount);
+                        break;
+                    default:
+                        break;
+                }
+
+                displayNotes(notesObj);
+            }
+
+            function deleteNote(index) {
+                let notes = localStorage.getItem("notes");
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+
+                notesObj.splice(index, 1);
+                localStorage.setItem("notes", JSON.stringify(notesObj));
+                showNotes();
+            }
+
+            function saveFavorite(index) {
+                let notes = localStorage.getItem("notes");
+                if (notes == null) {
+                    notesObj = [];
+                } else {
+                    notesObj = JSON.parse(notes);
+                }
+                let favFlag = notesObj[index].fav;
+                notesObj[index].fav = favFlag ? false : true;
+                localStorage.setItem("notes", JSON.stringify(notesObj));
+                showNotes();
+            }
+
+            function sortByDateAscending(a, b) {
+                return new Date(a.timestamp) - new Date(b.timestamp);
+            }
+
+            function sortByDateDescending(a, b) {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            }
+
+            function sortByImportance(a, b) {
+                return a?.fav === b?.fav ? 0 : a?.fav ? -1 : 1;
+            }
+
+            function sortByWordCount(a, b) {
+                return a.text.split(" ").length - b.text.split(" ").length;
+            }
+
+            const searchNote = document.getElementsByClassName("note-search")[0];
+
+            searchNote.addEventListener("input", (elem) => {
+                const values = elem.target.value.toLowerCase();
+                let noteCards = document.getElementsByClassName("noteCard");
+                Array.from(noteCards).forEach((noteCard) => {
+                    const isAvailable = noteCard
+                        .getElementsByTagName("p")[0]
+                        .innerText.toLowerCase()
+                        .includes(values) || noteCard
+                        .getElementsByClassName("card-title")[0]
+                        .innerText.toLowerCase()
+                        .includes(values);
+                    noteCard.classList.toggle("hide", !isAvailable);
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
 
