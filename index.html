@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="icon" href="notes1.png">
-    <title>Easy Notes</title>
+    <link rel="icon" href="32-329528_torn-note-free-pen-and-pad-free-rmx.png">
+    <title>Notes App</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
+            --bg: rgb(137, 144, 158);
+            --bg-input: #141419;
+        }
+
+        :root {
             --bg: linear-gradient(to top right, #363690 41%, #3ec7f5 100%);
             --bg-input: #e1e1ed;
         }
 
+        /* light mode edited */
         .light-mode {
             --bg: linear-gradient(to left, #2a2d30, #080a0c);
             --bg-input: #fcf9f9;
@@ -44,7 +49,7 @@
             padding: 2px;
             width: 52px;
             height: 27px;
-            background-color: rgba(23, 21, 21, 0.3);
+            background-color: var(--color-border), rgba(23, 21, 21, 0.3);
             border-radius: 100px;
         }
 
@@ -133,7 +138,7 @@
 
         .delBtn {
             background-color: #c21e1e;
-            columns: #ffffff;
+            color: #ffffff;
         }
 
         .note-title {
@@ -219,6 +224,7 @@
             color: gold;
         }
 
+        /* Search box */
         .search-bar {
             gap: 0.25rem;
             display: flex;
@@ -260,10 +266,9 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container" id="header">
-        <img src="notes.png" alt="My Notes" id="Image1">
+        <img src="32-329528_torn-note-free-pen-and-pad-free-rmx.png" alt="My Notes" id="Image1">
         <h1 style="color: rgb(162, 240, 255); margin: 10px; margin-left: 10rem;">Welcome To Magic Notes</h1>
     </div>
 
@@ -290,8 +295,7 @@
                     </div>
                     <div class="form-group">
                         <label for="addTxt">Please add your notes</label>
-                        <textarea class="form-control note-textarea" id="addTxt" rows="3"
-                            placeholder="Enter your notes here"></textarea>
+                        <textarea class="form-control note-textarea" id="addTxt" rows="3" placeholder="Enter your notes here"></textarea>
                     </div>
                     <button class="btn btn-primary" id="addBtn">Add Note</button>
                 </form>
@@ -389,6 +393,7 @@
                             </div>
                         </div>`;
                 });
+
                 let notesElm = document.getElementById("notes");
                 if (notesObj.length != 0) {
                     notesElm.innerHTML = html;
@@ -514,6 +519,4 @@
         </script>
     </div>
 </body>
-
 </html>
-
