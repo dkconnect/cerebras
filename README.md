@@ -1,4 +1,3 @@
-```markdown
 # CEREBRAS 60 Second Hackathon
 
 ## Project Overview
